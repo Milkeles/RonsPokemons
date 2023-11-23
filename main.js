@@ -1,7 +1,7 @@
 const NUM_BUSHES = 50
 const POKEMON_PROBABILITY = 0.1; //10%
 const MAX_CHECKED_BUSHES = 5;
-
+// you probably gonna need some explaining for this btw
 const player = document.querySelector('.player')
 const player_pos = {
     x: parseInt(window.innerWidth / 2),
@@ -71,8 +71,8 @@ function checkCollisions() {
             if (hasPokemon <= POKEMON_PROBABILITY) {
                 console.log("Has pokemon");
                 sound.play();
-                bush.bush.remove();
-                generateBush();
+                // bush.bush.remove();
+                // generateBush();
             }
         }
     });
