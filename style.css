@@ -35,3 +35,23 @@ body{
     position: fixed;
     z-index: -1;
 }
+
+.prompt-square {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 200px;
+    background-color: #f0f0f0;
+    border: 2px solid #333;
+    padding: 20px;
+    text-align: center;
+    display: none;
+}
+
+#pokemonImage {
+    max-width: 100%;
+    max-height: 100px;
+    margin-bottom: 10px;
+}
