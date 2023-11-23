@@ -1,8 +1,10 @@
 const NUM_BUSHES = 50
 const POKEMON_PROBABILITY = 0.1; //10%
 const MAX_CHECKED_BUSHES = 5;
-// you probably gonna need some explaining for this btw
-const player = document.querySelector('.player')
+
+const apiUrl = `https://pokeapi.co/api/v2/pokemon/`;
+const player = document.querySelector('.player');
+
 const player_pos = {
     x: parseInt(window.innerWidth / 2),
     y: parseInt(window.innerHeight / 2)
@@ -13,8 +15,11 @@ const player_vel = {
 }
 
 const bushes = []
-let lastCheckedBushes = [];
+const lastCheckedBushes = [];
+const foundPokemons = [];
 const sound = new Audio('assets/coin.mp3')
+
+let canMove = true;
 
 function createBushes() {
     for (let i = 0; i < NUM_BUSHES; i++) {
@@ -36,6 +41,44 @@ function generateBush() {
     });
 }
 
+let pokemonId = null;
+let pokemonName = null;
+
+function startBattle() {
+    canMove = false;
+    let promptSquare = document.getElementById('battleWindow');
+    promptSquare.style.display = 'block';
+    let pokemonId = Math.floor(Math.random() * 20) + 1;
+
+    fetch(apiUrl + pokemonId)
+            .then(response => response.json())
+            .then(data => {
+                pokemonImage.src = data.sprites.front_default;
+                pokemonId = id;
+                pokemonName = data.name;
+                promptSquare.style.display = 'block';
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+}
+
+function endBattle() {
+    let promptSquare = document.getElementById('battleWindow');
+    promptSquare.style.display = 'none';
+    canMove = true;
+}
+
+function processInput() {
+    let userInput = document.getElementById('userInput').value;
+    if (userInput.toLowerCase() == pokemonName) {
+        foundPokemons.push(pokemonId);
+        alert("Correct!");
+    }
+    else {
+        alert("Incorrect!")
+    }
+    endBattle();
+}
 
 function collision($div1, $div2) {
     var x1 = $div1.getBoundingClientRect().left;
@@ -71,17 +114,27 @@ function checkCollisions() {
             if (hasPokemon <= POKEMON_PROBABILITY) {
                 console.log("Has pokemon");
                 sound.play();
-                // bush.bush.remove();
-                // generateBush();
+                startBattle();
             }
         }
     });
 }
 
-
 function run() {
     player_pos.x += player_vel.x
     player_pos.y += player_vel.y
+
+    if (player_pos.x < 0) {
+        player_pos.x = 0;
+    } else if (player_pos.x > window.innerWidth - player.offsetWidth) {
+        player_pos.x = window.innerWidth - player.offsetWidth;
+    }
+
+    if (player_pos.y < 0) {
+        player_pos.y = 0;
+    } else if (player_pos.y > window.innerHeight - player.offsetHeight) {
+        player_pos.y = window.innerHeight - player.offsetHeight;
+    }
 
     player.style.left = player_pos.x + 'px'
     player.style.bottom = player_pos.y + 'px'
@@ -99,21 +152,23 @@ function init() {
 init()
 
 window.addEventListener('keydown', function (e) {
-    if (e.key == "ArrowUp") {
-        player_vel.y = 3
-        player.style.backgroundImage = 'url("assets/player_front.png")'
-    }
-    if (e.key == "ArrowDown") {
-        player_vel.y = -3
-        player.style.backgroundImage = 'url("assets/player_back.png")'
-    }
-    if (e.key == "ArrowLeft") {
-        player_vel.x = -3
-        player.style.backgroundImage = 'url("assets/player_left.png")'
-    }
-    if (e.key == "ArrowRight") {
-        player_vel.x = 3
-        player.style.backgroundImage = 'url("assets/player_right.png")'
+    if (canMove) {
+        if (e.key == "ArrowUp") {
+            player_vel.y = 3
+            player.style.backgroundImage = 'url("assets/player_front.png")'
+        }
+        if (e.key == "ArrowDown") {
+            player_vel.y = -3
+            player.style.backgroundImage = 'url("assets/player_back.png")'
+        }
+        if (e.key == "ArrowLeft") {
+            player_vel.x = -3
+            player.style.backgroundImage = 'url("assets/player_left.png")'
+        }
+        if (e.key == "ArrowRight") {
+            player_vel.x = 3
+            player.style.backgroundImage = 'url("assets/player_right.png")'
+        }
     }
     player.classList.add('active')
 })
