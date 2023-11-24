@@ -1,8 +1,8 @@
 const NUM_BUSHES = 50
-const POKEMON_PROBABILITY = 0.1; //10%
+const POKEMON_PROBABILITY = 1; //10%
 const MAX_CHECKED_BUSHES = 5;
 
-const apiUrl = `https://pokeapi.co/api/v2/pokemon/`;
+
 const player = document.querySelector('.player');
 
 const player_pos = {
@@ -46,11 +46,14 @@ let pokemonName = null;
 
 function startBattle() {
     canMove = false;
+    const overlay = document.querySelector('.overlay');
+    overlay.classList.add('show');
+
     let promptSquare = document.getElementById('battleWindow');
     promptSquare.style.display = 'block';
-    let pokemonId = Math.floor(Math.random() * 20) + 1;
-
-    fetch(apiUrl + pokemonId)
+    let id = Math.floor(Math.random() * 20) + 1;
+    let apiUrl = `https://pokeapi.co/api/v2/pokemon/${id}`;
+    fetch(apiUrl)
             .then(response => response.json())
             .then(data => {
                 pokemonImage.src = data.sprites.front_default;
@@ -66,6 +69,8 @@ function endBattle() {
     let promptSquare = document.getElementById('battleWindow');
     promptSquare.style.display = 'none';
     canMove = true;
+    let overlay = document.querySelector('.overlay');
+    overlay.classList.remove('show');
 }
 
 function processInput() {
@@ -140,7 +145,7 @@ function run() {
     player.style.bottom = player_pos.y + 'px'
 
     checkCollisions()
-
+    
     requestAnimationFrame(run)
 }
 
