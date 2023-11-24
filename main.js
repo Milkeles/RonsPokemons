@@ -1,5 +1,5 @@
 const NUM_BUSHES = 50
-const POKEMON_PROBABILITY = 1; //10%
+const POKEMON_PROBABILITY = 0.1; //10%
 const MAX_CHECKED_BUSHES = 5;
 
 
