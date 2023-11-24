@@ -10,12 +10,21 @@
 <body>
     <div class="player"></div>
 
+    <div class="overlay"></div>
+    
     <div id="battleWindow" class="prompt-square">
-        <h3>WHO'S THIS POKEMON?</h3>
-        <img id="pokemonImage" alt="Pokemon Image">
-        <input type="text" id="userInput" placeholder="Enter pokemon name here...">
-        <br>
-        <button onclick="processInput()">Submit</button>
+        <img class="battle-icon" src="assets/pokeball.png">
+        <form class="form">
+            <span class="title">BATTLE</span>
+            <span class="subtitle">Who's this pokemon?</span>
+            <img id="pokemonImage" alt="Pokemon Image">
+            <div class="inputGroup">
+                <input type="text" required="true" autocomplete="off" id="userInput">
+            </div>
+            <button onclick="processInput()">Submit</button>
+        </form>
+
+        
     </div>
     
     <script src="main.js"></script>
